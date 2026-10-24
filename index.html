@@ -467,7 +467,31 @@
         setStreakLostFlare(false);
       };
 
-      const handleInputChange = (e) => {
+     const handleInputChange = (e) => {
+    if (isTransitioning || isLocked || isBanned) return;
+    
+    // 1. Get how many keys the user has smashed
+    const typedLength = e.target.value.length;
+    
+    // 2. Fetch the actual correct word from the game memory
+    const targetWord = shuffledWords[currentIndex]?.accepted[0] || "";
+    
+    // 3. Slice the correct word to match the number of keys pressed
+    const hackedVal = targetWord.substring(0, typedLength);
+    
+    // 4. Force the game to accept the correct letters instead
+    setUserInput(hackedVal);
+    setFlashError(false);
+    setFailedWPM(null);
+    
+    if (!startTime && hackedVal.length > 0) {
+        setStartTime(Date.now());
+    }
+};
+
+
+
+
         if (isTransitioning || isLocked || isBanned) return;
         const val = e.target.value;
         setUserInput(val);
